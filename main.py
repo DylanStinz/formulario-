@@ -1,21 +1,25 @@
+
 import flet as ft
+import datetime
 
 def main(page: ft.Page):
     page.title = "Gestión de Eventos"
     page.padding = 25
+    
+    
 
     titulo = ft.Text(
         value="Formulario de Registro de Evento",
         size=30,
         weight=ft.FontWeight.BOLD,
-        color=ft.Colors.BLUE_900
+        color=ft.Colors.GREEN_900
     )
     nombre_evento = ft.TextField(
         label="Nombre del evento",
         hint_text="Ingrese el nombre del evento",
         border=ft.InputBorder.OUTLINE,
         filled=True,
-        bgcolor=ft.Colors.GREY_100
+        bgcolor=ft.Colors.GREEN_100
     )
     tipo_evento = ft.Dropdown(
         label="Tipo de evento",
@@ -51,8 +55,15 @@ def main(page: ft.Page):
         value="",
         size=16,
         weight=ft.FontWeight.W_500,
-        color=ft.Colors.BLUE_800
+        color=ft.Colors.GREEN_800
     )
+    def handle_change(e: ft.Event [ft.DatePicker]):
+        page.add(ft.Text(f"Date changed: {e.control.value.strftime('%m/%d/%Y')}"))
+    def handle_dismissal(e: ft.Event[ft.DialogControl]):
+        page.add(ft.Text("DatePicker dismissed"))
+        
+    today = datetime.datetime.now()
+    
     def mostrar_resumen(e):
         resumen_texto.value = (
             f"Nombre del evento: {nombre_evento.value}\n"
@@ -79,7 +90,13 @@ def main(page: ft.Page):
                 duracion,
                 ft.Row([boton], alignment=ft.MainAxisAlignment.CENTER),
                 ft.Divider(),
-                resumen_texto
+                resumen_texto,
+                ft.Button(
+                    content="Pick date",
+                    icon=ft.Icons.CALENDAR_MONTH,
+                    on_click=lambda e: page.show_dialog(d),
+        )
+                
             ],
             spacing=20,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER
